@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 상세</title>
+</head>
+<body>
+<h1 th:text="${post.title}">제목</h1>
+<p><strong>작성자:</strong> <span th:text="${post.username}">작성자</span></p>
+<p><strong>내용:</strong> <span th:text="${post.contents}">내용</span></p>
+<p><strong>Created At:</strong> <span th:text="${post.createdAt}">Created Date</span></p>
+<p><strong>Modified At:</strong> <span th:text="${post.modifiedAt}">Modified Date</span></p>
+
+<a th:href="@{/board}">홈으로</a>
+<button onclick="showEditForm()">수정</button>
+<button onclick="deletePost()">삭제</button>
+
+<div class="form-container" id="editFormContainer" style="display:none;">
+    <h2>게시글 수정</h2>
+    <form id="editForm" th:data-id="${post.id}">
+        <label for="editTitle">제목:</label>
+        <input type="text" id="editTitle" name="title" th:value="${post.title}" required><br><br>
+
+        <label for="editContents">내용:</label>
+        <textarea id="editContents" name="contents" required th:text="${post.contents}"></textarea><br><br>
+
+        <label for="editPassword">비밀번호:</label>
+        <input type="password" id="editPassword" name="password" required><br><br>
+
+        <button type="button" onclick="submitEdit()">수정</button>
+        <button type="button" onclick="hideEditForm()">취소</button>
+    </form>
+</div>
+
+<div class="form-container" id="editFormContainer" style="display:none;">
+    <h2>게시글 수정</h2>
+    <form id="editForm" th:data-id="${post.id}">
+        <label for="editTitle">제목:</label>
+        <input type="text" id="editTitle" name="title" th:value="${post.title}" required><br><br>
+
+        <label for="editContents">내용:</label>
+        <textarea id="editContents" name="contents" required th:text="${post.contents}"></textarea><br><br>
+
+        <label for="editPassword">비밀번호:</label>
+        <input type="password" id="editPassword" name="password" required><br><br>
+
+        <button type="button" onclick="submitEdit()">수정</button>
+        <button type="button" onclick="hideEditForm()">취소</button>
+    </form>
+</div>
+
+<script>
+    function showEditForm() {
+        document.getElementById('editFormContainer').style.display = 'block';
+    }
+
+    function hideEditForm() {
+        document.getElementById('editFormContainer').style.display = 'none';
+    }
+
+    function submitEdit() {
+        const form = document.getElementById('editForm');
+        const id = form.getAttribute('data-id');
+        const formData = new FormData(form);
+
+        fetch(`/board/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(Object.fromEntries(formData))
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('게시글이 수정되었습니다.');
+                    window.location.href = `/board/${id}`;
+                } else {
+                    throw new Error('게시글 수정 중 오류가 발생했습니다.');
+                }
+            })
+            .catch(error => {
+                alert('게시글 수정 중 오류가 발생했습니다.');
+                console.error('Error:', error);
+            });
+    }
+
+    function deletePost() {
+        const form = document.getElementById('editForm');
+        const id = form.getAttribute('data-id');
+        fetch(`/board/${id}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('게시글이 삭제되었습니다.');
+                    window.location.href = '/board';
+                } else {
+                    throw new Error('게시글 삭제 중 오류가 발생했습니다.');
+                }
+            })
+            .catch(error => {
+                alert('게시글 삭제 중 오류가 발생했습니다.');
+                console.error('Error:', error);
+            });
+    }
+</script>
+</body>
+</html>
