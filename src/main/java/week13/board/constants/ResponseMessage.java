@@ -7,4 +7,6 @@ public class ResponseMessage {
     public static final String POST_GET_SUCCESS = "게시글 조회 성공";
     public static final String POST_UPDATE_SUCCESS = "게시글 수정 성공";
     public static final String POST_DELETE_SUCCESS = "게시글 삭제 성공";
+    public static final String USER_REGISTER_SUCCESS = "유저 회원가입 성공";
+    public static final String USER_LOGIN_SUCCESS = "유저 로그인 성공";
 }
