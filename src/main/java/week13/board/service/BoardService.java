@@ -37,7 +37,7 @@ public class BoardService {
     }
 
     @Transactional
-    public Long updatePost(Long id, PostUpdateRequestDto requestDto) {
+    public Post updatePost(Long id, PostUpdateRequestDto requestDto) {
         Post post = boardRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         if(!requestDto.getPassword().equals(post.getPassword())){
@@ -45,7 +45,7 @@ public class BoardService {
         }
         post.update(requestDto);
 
-        return post.getId();
+        return post;
     }
 
     @Transactional
