@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import week13.board.domain.Post;
-import week13.board.dto.PostRequestDto;
 import week13.board.dto.PostUpdateRequestDto;
 import week13.board.exception.CustomException;
 import week13.board.exception.ErrorCode;
