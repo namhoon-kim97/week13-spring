@@ -18,9 +18,9 @@ public class Post extends Timestamped{
     private String contents;
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
     public void update(PostUpdateRequestDto requestDto) {
         this.title = requestDto.getTitle();

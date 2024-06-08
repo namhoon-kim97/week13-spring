@@ -1,5 +1,6 @@
 package week13.board.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,7 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class LoginRequestDto {
+public class LoginDto {
+    @NotNull
     private String username;
+    @NotNull
     private String password;
 }

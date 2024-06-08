@@ -1,16 +1,15 @@
 package week13.board.domain;
 
-public enum UserRoleEnum {
-    ADMIN("ROLE_ADMIN"),
-    USER("ROLE_USER");
+import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
 
-    private final String role;
+@Getter
+public enum UserRoleEnum implements GrantedAuthority {
+    ROLE_USER,
+    ROLE_ADMIN;
 
-    UserRoleEnum(String role) {
-        this.role = role;
-    }
-
-    public String getRole() {
-        return role;
+    @Override
+    public String getAuthority() {
+        return name();
     }
 }

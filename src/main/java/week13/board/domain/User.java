@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -15,21 +15,20 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     private String username;
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    private List<Post> postList;
-
-    @Enumerated(EnumType.STRING)
-    private UserRoleEnum role;
-
-    public User(String username, String password, UserRoleEnum role) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-    }
+    @ManyToMany
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+    private Set<Authority> authorities;
+//
+//    @OneToMany(mappedBy = "user")
+//    private List<Post> postList;
 }
