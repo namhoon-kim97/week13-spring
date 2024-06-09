@@ -1,4 +1,4 @@
-package week13.board.jwt;
+package week13.board.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

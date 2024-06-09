@@ -7,7 +7,7 @@ import week13.board.domain.User;
 import week13.board.dto.UserDto;
 import week13.board.exception.DuplicateMemberException;
 import week13.board.exception.NotFoundMemberException;
-import week13.board.jwt.SecurityUtil;
+import week13.board.util.SecurityUtil;
 import week13.board.repository.UserRepository;
 
 
