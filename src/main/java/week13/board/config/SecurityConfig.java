@@ -10,10 +10,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import week13.board.jwt.JwtAccessDeniedHandler;
-import week13.board.jwt.JwtAuthenticationEntryPoint;
-import week13.board.jwt.JwtSecurityConfig;
-import week13.board.jwt.TokenProvider;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import week13.board.jwt.*;
 
 
 @EnableWebSecurity
@@ -60,7 +58,12 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
+                // Token Exception 설정
+                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), JwtFilter.class)
+
                 .with(new JwtSecurityConfig(tokenProvider), customizer -> {});
+
         return http.build();
     }
 }

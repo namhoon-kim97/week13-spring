@@ -42,7 +42,7 @@ public class AuthController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-        ApiResponse<TokenDto> response = new ApiResponse<>(HttpStatus.OK.value(), ResponseMessage.USER_LOGIN_SUCCESS, new TokenDto(jwt));
+        ApiResponse<TokenDto> response = new ApiResponse<>(HttpStatus.OK.value(), ResponseMessage.USER_LOGIN_SUCCESS, null);
 
         return ResponseEntity.ok()
                 .headers(httpHeaders)
