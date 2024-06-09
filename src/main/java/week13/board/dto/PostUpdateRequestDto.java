@@ -13,13 +13,11 @@ import week13.board.domain.Post;
 public class PostUpdateRequestDto {
     private String title;
     private String contents;
-    private String password;
 
     public Post toEntity() {
         return Post.builder()
                 .title(this.title)
                 .contents(this.contents)
-                .password(this.password)
                 .build();
     }
 }

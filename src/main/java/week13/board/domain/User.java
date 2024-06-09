@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -13,9 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User {
     @Id
-    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
     private String username;
     private String password;
@@ -28,6 +29,6 @@ public class User {
         USER
     }
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Post> postList;
+    @OneToMany(mappedBy = "user")
+    private List<Post> postList;
 }

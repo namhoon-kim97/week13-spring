@@ -16,9 +16,7 @@ import java.time.LocalDateTime;
 public class PostResponseDto {
     private Long id;
     private String title;
-    private String username;
     private String contents;
-    private String password;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
@@ -29,9 +27,7 @@ public class PostResponseDto {
         return PostResponseDto.builder()
                 .id(post.getId())
                 .title(post.getTitle())
-                .username(post.getUsername())
                 .contents(post.getContents())
-                .password(post.getPassword())
                 .createdAt(post.getCreatedAt())
                 .modifiedAt(post.getModifiedAt())
                 .build();

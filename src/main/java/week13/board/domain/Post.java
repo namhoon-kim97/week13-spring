@@ -14,17 +14,20 @@ public class Post extends Timestamped{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
-    private String username;
     private String contents;
-    private String password;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Post(String title, String contents, User user) {
+        this.title = title;
+        this.contents = contents;
+        this.user = user;
+    }
 
     public void update(PostUpdateRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
-        this.password = requestDto.getPassword();
     }
 }

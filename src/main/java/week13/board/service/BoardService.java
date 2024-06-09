@@ -2,20 +2,24 @@ package week13.board.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import week13.board.domain.Post;
+import week13.board.domain.User;
 import week13.board.dto.PostUpdateRequestDto;
 import week13.board.exception.CustomException;
 import week13.board.exception.ErrorCode;
 import week13.board.repository.BoardRepository;
+import week13.board.repository.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public List<Post> getAllPosts(){
@@ -24,23 +28,36 @@ public class BoardService {
 
     @Transactional
     public Post createPost(Post post) {
-        return boardRepository.save(post);
+        String username = getCurrentUsername();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USERNAME_NOT_FOUND));
+        Post newPost = new Post(post.getTitle(), post.getContents(), user);
+        return boardRepository.save(newPost);
+    }
+
+    private String getCurrentUsername() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((UserDetails) principal).getUsername();
+        } else {
+            return principal.toString();
+        }
     }
 
     @Transactional
     public Post findPostById(Long id) {
-        Optional<Post> byId = boardRepository.findById(id);
-        if (byId.isEmpty())
-            throw new CustomException(ErrorCode.POST_NOT_FOUND);
-        return byId.get();
+        return boardRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
     }
 
     @Transactional
     public Post updatePost(Long id, PostUpdateRequestDto requestDto) {
         Post post = boardRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-        if(!requestDto.getPassword().equals(post.getPassword())){
-            throw new CustomException(ErrorCode.PASSWORD_ERROR);
+
+        String currentUsername = getCurrentUsername();
+        if (!post.getUser().getUsername().equals(currentUsername)) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
         }
         post.update(requestDto);
 
