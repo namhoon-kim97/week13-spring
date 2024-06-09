@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import week13.board.domain.User;
 import week13.board.repository.UserRepository;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component("userDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
@@ -31,9 +31,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private org.springframework.security.core.userdetails.User createUser(String username, User user) {
-        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
-                .collect(Collectors.toList());
+        List<GrantedAuthority> grantedAuthorities = Collections.singletonList(
+                new SimpleGrantedAuthority(user.getRole().name())
+        );
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(),

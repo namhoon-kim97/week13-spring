@@ -3,15 +3,12 @@ package week13.board.service;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import week13.board.domain.Authority;
 import week13.board.domain.User;
 import week13.board.dto.UserDto;
 import week13.board.exception.DuplicateMemberException;
 import week13.board.exception.NotFoundMemberException;
 import week13.board.jwt.SecurityUtil;
 import week13.board.repository.UserRepository;
-
-import java.util.Collections;
 
 
 @Service
@@ -30,14 +27,10 @@ public class UserService {
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
         }
 
-        Authority authority = Authority.builder()
-                .authorityName("ROLE_USER")
-                .build();
-
         User user = User.builder()
                 .username(userDto.getUsername())
                 .password(passwordEncoder.encode(userDto.getPassword()))
-                .authorities(Collections.singleton(authority))
+                .role(User.Role.USER)
                 .build();
 
         return UserDto.from(userRepository.save(user));

@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Entity
 @Getter
 @Builder
@@ -22,12 +20,20 @@ public class User {
     private String username;
     private String password;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
-    private Set<Authority> authorities;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public enum Role {
+        ADMIN,
+        USER
+    }
+
+//    @ManyToMany
+//    @JoinTable(
+//            name = "user_authority",
+//            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+//    private Set<Authority> authorities;
 //
 //    @OneToMany(mappedBy = "user")
 //    private List<Post> postList;
