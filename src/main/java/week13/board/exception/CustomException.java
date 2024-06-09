@@ -1,16 +1,13 @@
 package week13.board.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
-public class CustomException extends RuntimeException{
-    private ErrorCode errorCode;
-    private String message;
+public class CustomException extends RuntimeException {
+    private final ErrorCode errorCode;
 
-    public CustomException(ErrorCode errorCode){
+    public CustomException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
         this.errorCode = errorCode;
-        this.message = errorCode.getMessage();
     }
 }
