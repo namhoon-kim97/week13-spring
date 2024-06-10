@@ -13,12 +13,12 @@ import week13.board.dto.CommentResponseDto;
 import week13.board.service.CommentService;
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/comments/{postId}")
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/{postId}")
+    @PostMapping
     public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(@PathVariable Long postId, @RequestBody CommentRequestDto requestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
@@ -28,7 +28,7 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{postId}/{commentId}")
+    @PutMapping("/{commentId}")
     public ResponseEntity<ApiResponse<CommentResponseDto>> updateComment(@PathVariable Long postId, @PathVariable Long commentId, @RequestBody CommentRequestDto requestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
@@ -38,7 +38,7 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{postId}/{commentId}")
+    @DeleteMapping("/{commentId}")
     public ResponseEntity<ApiResponse<Void>> deleteComment(@PathVariable Long postId, @PathVariable Long commentId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
