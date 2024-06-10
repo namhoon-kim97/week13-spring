@@ -49,7 +49,7 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**","/", "/user/authenticate", "/user/signup", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**","/", "/user/login", "/user/signup", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
 
