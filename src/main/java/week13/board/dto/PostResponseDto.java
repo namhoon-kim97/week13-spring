@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostResponseDto {
-    private Long id;
+    private String username;
     private String title;
     private String contents;
 
@@ -25,7 +25,7 @@ public class PostResponseDto {
 
     public static PostResponseDto of(Post post) {
         return PostResponseDto.builder()
-                .id(post.getId())
+                .username(post.getUser().getUsername())
                 .title(post.getTitle())
                 .contents(post.getContents())
                 .createdAt(post.getCreatedAt())
