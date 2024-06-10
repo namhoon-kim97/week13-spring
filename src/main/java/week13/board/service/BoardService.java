@@ -8,14 +8,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import week13.board.domain.Post;
 import week13.board.domain.User;
+import week13.board.dto.CommentResponseDto;
+import week13.board.dto.PostResponseDto;
 import week13.board.dto.PostUpdateRequestDto;
 import week13.board.exception.CustomException;
 import week13.board.exception.ErrorCode;
 import week13.board.repository.BoardRepository;
 import week13.board.repository.UserRepository;
+import week13.board.util.CommentUtils;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +28,12 @@ public class BoardService {
     private final UserRepository userRepository;
 
     @Transactional
-    public List<Post> getAllPosts(){
-        return boardRepository.findAllByOrderByCreatedAtDesc();
+    public List<PostResponseDto> getAllPosts() {
+        List<Post> posts = boardRepository.findAllByOrderByCreatedAtDesc();
+
+        return posts.stream()
+                .map(post -> PostResponseDto.of(post, CommentUtils.convertAndSortComments(post.getComments())))
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -47,9 +55,13 @@ public class BoardService {
     }
 
     @Transactional
-    public Post findPostById(Long id) {
-        return boardRepository.findById(id)
+    public PostResponseDto findPostById(Long id) {
+        Post post = boardRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        List<CommentResponseDto> comments = CommentUtils.convertAndSortComments(post.getComments());
+
+        return PostResponseDto.of(post, comments);
     }
 
     @Transactional

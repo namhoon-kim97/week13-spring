@@ -17,7 +17,8 @@ public enum ErrorCode {
     RE_LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED,"인증 만료. 다시 로그인 해주시기 바랍니다."),
     PASSWORD_ERROR(HttpStatus.BAD_REQUEST,"비밀번호가 올바르지 않습니다."),
     UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED,"작성자만 수정할 수 있습니다."),
-    NEW_PASSWORD_NOT_CORRECT(HttpStatus.BAD_REQUEST,"새 비밀번호를 다시 확인해주세요.");
+    NEW_PASSWORD_NOT_CORRECT(HttpStatus.BAD_REQUEST,"새 비밀번호를 다시 확인해주세요."),
+    COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "댓글이 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

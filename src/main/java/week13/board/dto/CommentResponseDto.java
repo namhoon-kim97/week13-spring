@@ -5,34 +5,30 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import week13.board.domain.Post;
+import week13.board.domain.Comment;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostResponseDto {
+public class CommentResponseDto {
+    private String content;
     private String username;
-    private String title;
-    private String contents;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedAt;
-    List<CommentResponseDto> comments;
 
-    public static PostResponseDto of(Post post, List<CommentResponseDto> comments) {
-        return PostResponseDto.builder()
-                .username(post.getUser().getUsername())
-                .title(post.getTitle())
-                .contents(post.getContents())
-                .createdAt(post.getCreatedAt())
-                .modifiedAt(post.getModifiedAt())
-                .comments(comments)
+    public static CommentResponseDto of(Comment comment) {
+        return CommentResponseDto.builder()
+                .username(comment.getUser().getUsername())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .modifiedAt(comment.getModifiedAt())
                 .build();
     }
 }

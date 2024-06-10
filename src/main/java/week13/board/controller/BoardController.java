@@ -7,14 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import week13.board.constants.ResponseMessage;
 import week13.board.domain.Post;
-import week13.board.dto.ApiResponse;
-import week13.board.dto.PostRequestDto;
-import week13.board.dto.PostResponseDto;
-import week13.board.dto.PostUpdateRequestDto;
+import week13.board.dto.*;
 import week13.board.service.BoardService;
+import week13.board.util.CommentUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,31 +21,34 @@ public class BoardController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<PostResponseDto>>> getAllPosts() {
-        List<PostResponseDto> posts = boardService.getAllPosts().stream()
-                .map(PostResponseDto::of)
-                .collect(Collectors.toList());
-        ApiResponse<List<PostResponseDto>> response = new ApiResponse<>(HttpStatus.OK.value(), ResponseMessage.POST_LIST_SUCCESS, posts);
+        ApiResponse<List<PostResponseDto>> response = new ApiResponse<>(HttpStatus.OK.value(), ResponseMessage.POST_LIST_SUCCESS, boardService.getAllPosts());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<PostResponseDto>> createPost(@Valid @RequestBody PostRequestDto requestDto){
+    public ResponseEntity<ApiResponse<PostResponseDto>> createPost(@Valid @RequestBody PostRequestDto requestDto) {
         Post post = boardService.createPost(requestDto.toEntity());
-        ApiResponse<PostResponseDto> response = new ApiResponse<>(HttpStatus.CREATED.value(), ResponseMessage.POST_CREATE_SUCCESS, PostResponseDto.of(post));
+
+        List<CommentResponseDto> comments = CommentUtils.convertAndSortComments(post.getComments());
+
+        PostResponseDto postResponseDto = PostResponseDto.of(post, comments);
+        ApiResponse<PostResponseDto> response = new ApiResponse<>(HttpStatus.CREATED.value(), ResponseMessage.POST_CREATE_SUCCESS, postResponseDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<PostResponseDto>> getPostById(@PathVariable("id") Long id){
-        Post post = boardService.findPostById(id);
-        ApiResponse<PostResponseDto> response = new ApiResponse<>(HttpStatus.OK.value(), ResponseMessage.POST_GET_SUCCESS, PostResponseDto.of(post));
+        ApiResponse<PostResponseDto> response = new ApiResponse<>(HttpStatus.OK.value(), ResponseMessage.POST_GET_SUCCESS, boardService.findPostById(id));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<PostResponseDto>> updatePost(@PathVariable("id") Long id, @RequestBody PostUpdateRequestDto requestDto) {
         Post updatedPost = boardService.updatePost(id, requestDto);
-        ApiResponse<PostResponseDto> response = new ApiResponse<>(HttpStatus.OK.value(), ResponseMessage.POST_UPDATE_SUCCESS, PostResponseDto.of(updatedPost));
+
+        List<CommentResponseDto> comments = CommentUtils.convertAndSortComments(updatedPost.getComments());
+
+        ApiResponse<PostResponseDto> response = new ApiResponse<>(HttpStatus.OK.value(), ResponseMessage.POST_UPDATE_SUCCESS, PostResponseDto.of(updatedPost, comments));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

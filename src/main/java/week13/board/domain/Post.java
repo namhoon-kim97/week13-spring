@@ -1,8 +1,13 @@
 package week13.board.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import week13.board.dto.PostUpdateRequestDto;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,6 +24,9 @@ public class Post extends Timestamped{
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
 
     public Post(String title, String contents, User user) {
         this.title = title;
